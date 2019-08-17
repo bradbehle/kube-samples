@@ -46,3 +46,50 @@ spec:
   selector: ibm.role == 'worker_private'
   types:
   - Egress
+
+---
+
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: allow-private-service-endpoint-iks
+spec:
+  egress:
+  - action: Allow
+    destination:
+      nets:
+      # Nets for US East: mon01, tor01, wdc04, wdc06, wdc07
+      - 166.9.20.11/32
+      - 166.9.22.8/32
+      - 166.9.20.12/32
+      - 166.9.20.13/32
+      - 166.9.22.9/32
+      - 166.9.22.10/32
+      - 166.9.24.4/32
+      - 166.9.24.5/32
+      ports:
+      - 20000:32767
+      - 443
+    protocol: UDP
+    source: {}
+  - action: Allow
+    destination:
+      nets:
+      # Nets for US East: mon01, tor01, wdc04, wdc06, wdc07
+      - 166.9.20.11/32
+      - 166.9.22.8/32
+      - 166.9.20.12/32
+      - 166.9.20.13/32
+      - 166.9.22.9/32
+      - 166.9.22.10/32
+      - 166.9.24.4/32
+      - 166.9.24.5/32
+      ports:
+      - 20000:32767
+      - 443
+    protocol: TCP
+    source: {}
+  order: 1900
+  selector: iks.worker.interface == 'private'
+  types:
+  - Egress

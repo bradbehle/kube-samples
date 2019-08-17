@@ -26,3 +26,32 @@ spec:
   types:
   - Egress
   - Ingress
+
+---
+
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: allow-all-workers-private-iks
+spec:
+  egress:
+  - action: Allow
+    destination:
+      selector: iks.worker.interface == 'private'
+    source: {}
+  - action: Allow
+    destination:
+      nets:
+      # Allows communication to pod IPs
+      - 172.30.0.0/16
+    source: {}
+  ingress:
+  - action: Allow
+    destination: {}
+    source:
+      selector: iks.worker.interface == 'private'
+  order: 1950
+  selector: iks.worker.interface == 'private'
+  types:
+  - Egress
+  - Ingress

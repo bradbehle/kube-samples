@@ -1,0 +1,22 @@
+# This policy denies all ingress and egress traffic that is not allowed by other
+# host policies.  It is needed because starting in IKS 1.15 an allow-all-private-default
+# policy is deployed that allows all traffic for this particular selector
+
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: deny-all-private-default
+spec:
+  egress:
+  - action: Deny
+    destination: {}
+    source: {}
+  ingress:
+  - action: Deny
+    destination: {}
+    source: {}
+  order: 99999
+  selector: iks.worker.interface == 'private'
+  types:
+  - Egress
+  - Ingress

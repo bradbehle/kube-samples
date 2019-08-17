@@ -14,3 +14,20 @@ spec:
   selector: ibm.role == 'worker_private'
   types:
   - Ingress
+
+---
+
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: allow-vrrp-private-iks
+spec:
+  ingress:
+  - action: Allow
+    destination: {}
+    protocol: 112
+    source: {}
+  order: 1500
+  selector: iks.worker.interface == 'private'
+  types:
+  - Ingress

@@ -78,3 +78,80 @@ spec:
   types:
   - Ingress
   - Egress
+
+---
+
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: allow-ibm-ports-private-iks
+spec:
+  egress:
+  - action: Allow
+    destination:
+      ports:
+      - 53
+      - 443
+      - 2049
+      - 3260
+    protocol: UDP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 53
+      - 443
+      - 2049
+      - 3260
+    protocol: TCP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 2040:2041
+      nets:
+      - 172.20.0.0/24
+    protocol: UDP
+  - action: Allow
+    destination:
+      ports:
+      - 2040:2041
+      nets:
+      - 172.20.0.0/24
+    protocol: TCP
+  - action: Allow
+    destination:
+      ports:
+      - 443
+      nets:
+      - 172.21.0.1/32
+    protocol: UDP
+  - action: Allow
+    destination:
+      ports:
+      - 443
+      nets:
+      - 172.21.0.1/32
+    protocol: TCP
+  ingress:
+  - action: Allow
+    destination:
+      ports:
+      - 53
+      - 10250
+      - 52311
+    protocol: UDP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 53
+      - 10250
+      - 52311
+    protocol: TCP
+    source: {}
+  order: 1500
+  selector: iks.worker.interface == 'private'
+  types:
+  - Ingress
+  - Egress
